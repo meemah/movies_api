@@ -1,56 +1,53 @@
 import { plainToClass } from "class-transformer";
 import { validate } from "class-validator";
-import { Request, Response } from "express";
+import { Response } from "express";
+import { Request } from "express-serve-static-core";
 import { AppDataSource } from "../data-source";
 import { DirectorRequest } from "../dtos/director.request";
 import { Cast } from "../entity/Cast.entity";
 import { Director } from "../entity/Director.entity";
-const { failed, success, validator } = require("../helpers/response")
-export class CastController {
-    static async getAllCast(request: Request, response: Response) {
-        try {
-            const castRepo = AppDataSource.getRepository(Cast);
-            const casts: Cast[] = await castRepo.find();
-            return response.status(200).json(success("Cast fetched sucessfully", casts))
-        } catch (error) {
-            return response.status(500).json(failed(error.toString(),))
-        }
-    }
+import { AppError, NotFound } from "../helpers/custom_error";
+const { success, } = require("../helpers/response")
+const { tryCatch } = require("../helpers/try_catch");
 
-    static async addCast(request: Request, response: Response) {
-        try {
-            const castRepo = AppDataSource.getRepository(Cast);
-            const requestBody = plainToClass(DirectorRequest, request.body);
-            const errors = await validate(requestBody);
-            if (errors.length == 0) {
-                const doesDirectorExist = await CastController.doesCastExist(requestBody.name) !== null;
-                if (doesDirectorExist) {
-                    return response.status(400).json(failed("Cast exists"))
-                }
-                const director = await castRepo.save(requestBody);
-                return response.status(200).json(success(`${requestBody.name} added`))
-            } else {
-                return response.status(400).json(failed(errors.toString()))
+export class CastController {
+    static getAllCast = tryCatch(async (_: Request, response: Response) => {
+        const castRepo = AppDataSource.getRepository(Cast);
+        const casts: Cast[] = await castRepo.find();
+        return response.status(200).json(success("Cast fetched sucessfully", casts))
+
+    });
+
+
+    static addCast = tryCatch(async (request: Request, response: Response) => {
+        const castRepo = AppDataSource.getRepository(Cast);
+        const requestBody = plainToClass(DirectorRequest, request.body);
+        const errors = await validate(requestBody);
+        if (errors.length == 0) {
+            const doesDirectorExist = await CastController.doesCastExist(requestBody.name) !== null;
+            if (doesDirectorExist) {
+                throw new AppError("Cast Exists")
             }
-        } catch (error) {
-            return response.status(500).json(failed(error.toString(),))
+            await castRepo.save(requestBody);
+            return response.status(200).json(success(`${requestBody.name} added`))
+        } else {
+            throw errors;
         }
-    }
-    static async updateCast(request: Request, response: Response) {
-        try {
-            const directorId = request.params.id;
-            const castRepo = AppDataSource.getRepository(Cast);
-            const selectedCast = await castRepo.findOne({ where: { id: directorId } })
-            if (!selectedCast) {
-                return response.status(400).json(failed("Cast doesnt exist"));
-            }
-            castRepo.merge(selectedCast, request.body);
-            await castRepo.save(selectedCast);
-            return response.status(200).json(success("Cast updated"));
-        } catch (error) {
-            return response.status(500).json(failed(error.toString(),));
+    });
+
+
+    static updateCast = tryCatch(async (request: Request, response: Response) => {
+        const directorId = request.params.id;
+        const castRepo = AppDataSource.getRepository(Cast);
+        const selectedCast = await castRepo.findOne({ where: { id: directorId } })
+        if (!selectedCast) {
+            throw new NotFound("Cast Exists",)
         }
-    }
+        castRepo.merge(selectedCast, request.body);
+        await castRepo.save(selectedCast);
+        return response.status(200).json(success("Cast updated"));
+    });
+
 
     static async doesCastExist(name: string): Promise<Director | null> {
         const castRepo = AppDataSource.getRepository(Cast);
