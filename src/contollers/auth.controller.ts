@@ -5,12 +5,11 @@ import { AppDataSource } from "../data-source";
 import { LogInRequest } from "../dtos/login.request";
 import { SignUpRequest } from "../dtos/signup.request";
 import { User } from "../entity/User";
-import { EncryptionHelper } from "../helpers/enctyption";
+import { EncryptionHelper } from "../helpers/encryption";
 
 const { failed, success, validator } = require("../helpers/response")
 export class AuthController {
     static async login(request: Request, response: Response) {
-
         try {
             const requestBody = plainToClass(LogInRequest, request.body);
             const errors = await validate(requestBody);

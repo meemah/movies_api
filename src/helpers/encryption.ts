@@ -9,9 +9,9 @@ export class EncryptionHelper {
 
     static async savePassword(password: string): Promise<string> {
         try {
-            const salt = await bcrypt.genSalt(10); // Generate salt
-            const hashedPassword = await bcrypt.hash(password, salt); // Hash the password
-            return hashedPassword; // Return the hashed password
+            const salt = await bcrypt.genSalt(10)
+            const hashedPassword = await bcrypt.hash(password, salt);
+            return hashedPassword;
         } catch (error) {
             throw new Error("Error hashing password");
         }
