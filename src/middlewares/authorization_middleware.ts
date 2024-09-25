@@ -12,6 +12,6 @@ export const AuthorizationMiddleware = (request: Request, response: Response, ne
     } catch (error) {
         return response.status(401).json(failed(
             "Unauthorized"
-        ),);
+        ));
     }
 }

@@ -1,6 +1,7 @@
 import express, { json } from "express";
 
 import { AppDataSource } from "./data-source";
+import { ErrorHandler } from "./middlewares/errorhandler_middleware";
 import { AuthRouter } from "./routes/auth.routes";
 import { CastRouter } from "./routes/cast.routes";
 import { DirectorRouter } from "./routes/director.routes";
@@ -18,6 +19,7 @@ app.use("/api", DirectorRouter);
 app.use("/api", StudioRouter);
 app.use("/api", CastRouter);
 app.use("/api", ReviewRouter);
+app.use(ErrorHandler)
 AppDataSource.initialize().then(async () => {
     app.listen(port, () => {
         console.log(`Hi, I am listening on ${port}`)

@@ -6,7 +6,7 @@ import { StudioRequest } from "../dtos/studio.request";
 import { Studio } from "../entity/Studio.entity";
 const { failed, success, validator } = require("../helpers/response")
 export class StudioController {
-    static async getStudios(request: Request, response: Response) {
+    static async getStudios(_: Request, response: Response) {
         try {
             const studioRepo = AppDataSource.getRepository(Studio)
             const studios: Studio[] = await studioRepo.find();

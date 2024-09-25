@@ -16,7 +16,7 @@ exports.failed = (message: string, statusCode: Number) => {
     };
 }
 
-exports.validation = (validationErrors) => {
+exports.validation = (validationErrors: string) => {
     return {
         "success": false,
         "code": 422,
