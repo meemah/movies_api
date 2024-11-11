@@ -44,8 +44,6 @@ export class StudioController {
     })
 
 
-
-
     static async doesStudioExistByName(name: string) {
         const studioRepo = AppDataSource.getRepository(Studio);
         const studio = await studioRepo.findOne({ where: { name: name } });

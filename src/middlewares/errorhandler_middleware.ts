@@ -7,7 +7,7 @@ export const ErrorHandler = (error: any, request: Request, response: Response, n
         return response.status(422).json(validation(extractValidationErrors(error)))
     }
     if (error instanceof NotFound || error.name === "NotFound") {
-        return response.status(404).json(failed("Not Found", 404))
+        return response.status(404).json(failed(error.message, 404))
     }
     if (error instanceof AppError) {
         return response.status(400).json(failed(error.message, 400),)

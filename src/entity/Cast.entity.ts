@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Movie } from "./Movie.entity";
 
 
 @Entity()
@@ -15,4 +16,6 @@ export class Cast {
     createdAt: Date
     @UpdateDateColumn()
     updateAt: Date
+    @ManyToMany(() => Movie, movie => movie.cast)
+    movies: Movie[]
 }

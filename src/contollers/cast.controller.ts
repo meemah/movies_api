@@ -29,7 +29,7 @@ export class CastController {
                 throw new AppError("Cast Exists")
             }
             await castRepo.save(requestBody);
-            return response.status(200).json(success(`${requestBody.name} added`))
+            return response.status(200).json(success(`${requestBody.name} added`, requestBody))
         } else {
             throw errors;
         }
@@ -45,7 +45,7 @@ export class CastController {
         }
         castRepo.merge(selectedCast, request.body);
         await castRepo.save(selectedCast);
-        return response.status(200).json(success("Cast updated"));
+        return response.status(200).json(success("Cast updated", selectedCast));
     });
 
 

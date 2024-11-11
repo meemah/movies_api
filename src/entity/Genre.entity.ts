@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Movie } from "./Movie.entity";
 
 @Entity()
 export class Genre {
@@ -16,5 +17,10 @@ export class Genre {
 
     @Column({ nullable: true })
     imageUrl: string
+
+
+
+    @ManyToMany(() => Movie, movie => movie.genres)
+    movies: Movie[]
 
 }

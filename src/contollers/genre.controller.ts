@@ -17,7 +17,7 @@ export class GenreController {
         if (errors.length == 0) {
             const doesGenreExist = await GenreController.doesGenreExist(requestBody.name);
             if (doesGenreExist) {
-                throw new AppError("Director exists");
+                throw new AppError("Genre exists");
             } else {
                 const genre = await genreRepo.save(requestBody);
                 return response.status(200).json(success(`${genre.name} added`, genre))

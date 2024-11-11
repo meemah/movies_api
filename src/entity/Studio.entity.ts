@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Movie } from "./Movie.entity";
 
 @Entity()
 export class Studio {
@@ -19,4 +20,7 @@ export class Studio {
 
     @Column({ nullable: true })
     imageUrl: string
+
+    @OneToMany(() => Movie, movie => movie.studio)
+    movies: Movie[]
 }

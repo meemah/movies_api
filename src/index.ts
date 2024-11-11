@@ -6,6 +6,7 @@ import { AuthRouter } from "./routes/auth.routes";
 import { CastRouter } from "./routes/cast.routes";
 import { DirectorRouter } from "./routes/director.routes";
 import { GenreRouter } from "./routes/genre.routes";
+import { MovieRouter } from "./routes/movie.routes";
 import { ReviewRouter } from "./routes/review.routes";
 import { StudioRouter } from "./routes/studio.routes";
 
@@ -19,6 +20,7 @@ app.use("/api", DirectorRouter);
 app.use("/api", StudioRouter);
 app.use("/api", CastRouter);
 app.use("/api", ReviewRouter);
+app.use("/api", MovieRouter);
 app.use(ErrorHandler)
 AppDataSource.initialize().then(async () => {
     app.listen(port, () => {
