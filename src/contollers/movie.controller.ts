@@ -65,9 +65,12 @@ export class MovieController {
             })
             if (requestedCasts.length !== requestBody.casts.length) {
 
-                const foundCastIds = new Set(requestedCasts.map(cast => cast.id));
+                const foundCastIds = new Set(requestedCasts.map(cast => String(cast.id)));
                 const missingCastIds = requestBody.casts.filter(id => !foundCastIds.has(id));
-
+                console.log(foundCastIds);
+                console.log('====================================');
+                console.log(missingCastIds);
+                console.log('====================================');
                 throw new NotFound(`Casts with IDs ${missingCastIds.join(', ')} not found.`);
             }
 
