@@ -67,10 +67,7 @@ export class MovieController {
 
                 const foundCastIds = new Set(requestedCasts.map(cast => String(cast.id)));
                 const missingCastIds = requestBody.casts.filter(id => !foundCastIds.has(id));
-                console.log(foundCastIds);
-                console.log('====================================');
-                console.log(missingCastIds);
-                console.log('====================================');
+
                 throw new NotFound(`Casts with IDs ${missingCastIds.join(', ')} not found.`);
             }
 
@@ -81,4 +78,12 @@ export class MovieController {
         }
 
     });
+
+    static getMovies = tryCatch(async (request: Request, response: Response) => {
+        const movieRepo = AppDataSource.getRepository(Movie);
+
+        const allMovies = await movieRepo.find();
+
+        return response.status(200).json(success("Movies fetched", allMovies));
+    })
 }
