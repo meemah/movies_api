@@ -34,12 +34,12 @@ export class StudioController {
         const requestBody = plainToClass(StudioRequest, request.body);
         const selectedStudio = await studioRepo.findOne({ where: { id: studioId } })
         if (!selectedStudio) {
-            return new NotFound()
+            return new NotFound("Studio not found")
         }
         if (selectedStudio) {
             studioRepo.merge(selectedStudio, requestBody);
             await studioRepo.save(selectedStudio);
-            return response.status(200).json(success(`${requestBody.name} updates`))
+            return response.status(200).json(success(`${requestBody.name} updated`))
         }
     })
 
